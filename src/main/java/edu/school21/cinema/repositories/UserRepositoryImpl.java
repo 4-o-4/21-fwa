@@ -1,6 +1,7 @@
 package edu.school21.cinema.repositories;
 
 import edu.school21.cinema.models.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,9 +10,11 @@ import java.sql.Statement;
 
 public class UserRepositoryImpl implements UserRepository {
     private final Connection connection;
+    private final PasswordEncoder encoder;
 
-    public UserRepositoryImpl(Connection connection) {
+    public UserRepositoryImpl(Connection connection, PasswordEncoder encoder) {
         this.connection = connection;
+        this.encoder = encoder;
     }
 
     @Override
@@ -20,12 +23,13 @@ public class UserRepositoryImpl implements UserRepository {
             pst.setString(1, user.getFirstname());
             pst.setString(2, user.getLastname());
             pst.setString(3, user.getPhone());
+            pst.setString(4, encoder.encode(user.getPassword()));
             pst.executeUpdate();
         }
     }
 
     enum SQLUser {
-        INSERT("INSERT INTO \"user\" (firstname, lastname, phone) VALUES (?, ?, ?)");
+        INSERT("INSERT INTO \"user\" (firstname, lastname, phone, password) VALUES (?, ?, ?, ?)");
 
         final String QUERY;
 

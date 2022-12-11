@@ -17,7 +17,7 @@ public class SignUp extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("WEB-INF/jsp/signUp.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/signUp.jsp").forward(req, resp);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class SignUp extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        req.getRequestDispatcher("WEB-INF/jsp/signIn.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/signIn.jsp").forward(req, resp);
     }
 
     @Override

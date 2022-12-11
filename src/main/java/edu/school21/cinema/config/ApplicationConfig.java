@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,7 +17,7 @@ import java.sql.SQLException;
 
 @Configuration
 @ComponentScan("edu.school21.cinema")
-@PropertySource("classpath:application.properties")
+@PropertySource("file:src/main/webapp/WEB-INF/application.properties")
 public class ApplicationConfig {
     @Value("${db.url}")
     private String url;
@@ -26,8 +28,13 @@ public class ApplicationConfig {
     }
 
     @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public UserRepository userRepository() throws SQLException {
-        return new UserRepositoryImpl(dataSource());
+        return new UserRepositoryImpl(dataSource(), encoder());
     }
 
     @Bean

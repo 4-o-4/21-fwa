@@ -5,5 +5,5 @@ CREATE TABLE "user" (
     firstname   varchar(20) not null,
     lastname    varchar(20) not null,
     phone       varchar(20) not null,
-    password    varchar(20)
+    password    varchar
 );
