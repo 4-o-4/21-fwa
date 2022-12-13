@@ -3,10 +3,9 @@ package edu.school21.cinema.repositories;
 import edu.school21.cinema.models.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import javax.servlet.http.HttpServletRequest;
+import java.sql.*;
+import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepository {
     private final Connection connection;
@@ -15,6 +14,23 @@ public class UserRepositoryImpl implements UserRepository {
     public UserRepositoryImpl(Connection connection, PasswordEncoder encoder) {
         this.connection = connection;
         this.encoder = encoder;
+    }
+
+    @Override
+    public Optional<User> findByName(HttpServletRequest req) throws SQLException {
+        try (PreparedStatement pst = connection.prepareStatement(SQLUser.GET.QUERY)) {
+            pst.setString(1, req.getParameter("firstname"));
+            ResultSet rs = pst.executeQuery();
+            User user = null;
+            while (rs.next()) {
+                if (encoder.matches(req.getParameter("password"), rs.getString("password"))) {
+                    user = new User(rs);
+                    break;
+                }
+            }
+            rs.close();
+            return Optional.ofNullable(user);
+        }
     }
 
     @Override
@@ -29,6 +45,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     enum SQLUser {
+        GET("SELECT * FROM \"user\" WHERE firstname = ?"),
         INSERT("INSERT INTO \"user\" (firstname, lastname, phone, password) VALUES (?, ?, ?, ?)");
 
         final String QUERY;
