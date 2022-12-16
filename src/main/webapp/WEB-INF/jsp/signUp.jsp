@@ -26,3 +26,5 @@
         <input type="submit" value="Зарегистрироваться">
     </div>
 </form>
+
+<a href="signIn">Вход</a>

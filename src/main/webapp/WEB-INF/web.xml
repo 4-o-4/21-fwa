@@ -9,7 +9,7 @@
     </listener>
 
     <welcome-file-list>
-        <welcome-file>/WEB-INF/html/index.html</welcome-file>
+        <welcome-file>/WEB-INF/jsp/signIn.jsp</welcome-file>
     </welcome-file-list>
 
     <servlet>
@@ -29,6 +29,15 @@
         <servlet-name>signUp</servlet-name>
         <url-pattern>/signUp</url-pattern>
     </servlet-mapping>
+
+    <filter>
+        <filter-name>userFilter</filter-name>
+        <filter-class>edu.school21.cinema.filters.UserFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>userFilter</filter-name>
+        <url-pattern>/profile</url-pattern>
+    </filter-mapping>
 
     <servlet>
         <servlet-name>profile</servlet-name>
