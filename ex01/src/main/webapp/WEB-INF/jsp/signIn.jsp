@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<style>body{ background: antiquewhite; }</style>
 <form action="signIn" method="post">
     <p style="margin-bottom: 5px;">Вход</p>
     <div>

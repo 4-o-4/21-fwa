@@ -1,3 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<h1>404</h1>
+<style>body{ background: antiquewhite; }</style>
+<h1>403</h1>
