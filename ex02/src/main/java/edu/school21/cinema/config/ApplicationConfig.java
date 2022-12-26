@@ -1,7 +1,10 @@
 package edu.school21.cinema.config;
 
+import edu.school21.cinema.repositories.ImageRepository;
+import edu.school21.cinema.repositories.ImageRepositoryImpl;
 import edu.school21.cinema.repositories.UserRepository;
 import edu.school21.cinema.repositories.UserRepositoryImpl;
+import edu.school21.cinema.services.ImagesService;
 import edu.school21.cinema.services.UsersService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +46,16 @@ public class ApplicationConfig {
     @Bean
     public UsersService usersService() throws SQLException {
         return new UsersService(userRepository());
+    }
+
+    @Bean
+    public ImageRepository imageRepository() throws SQLException {
+        return new ImageRepositoryImpl(dataSource());
+    }
+
+    @Bean
+    public ImagesService imagesService() throws SQLException {
+        return new ImagesService(imageRepository());
     }
 
     @Bean

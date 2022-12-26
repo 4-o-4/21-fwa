@@ -1,5 +1,6 @@
 package edu.school21.cinema.repositories;
 
+import edu.school21.cinema.models.Image;
 import edu.school21.cinema.models.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -28,6 +29,8 @@ public class UserRepositoryImpl implements UserRepository {
                     break;
                 }
             }
+            if (user != null)
+                findImages(user);
             rs.close();
             return Optional.ofNullable(user);
         }
@@ -44,8 +47,19 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    private void findImages(User user) throws SQLException {
+        try (PreparedStatement pst = connection.prepareStatement(SQLUser.GET_IMAGES.QUERY)) {
+            pst.setLong(1, user.getId());
+            ResultSet rs = pst.executeQuery();
+            while (rs.next())
+                user.getImages().add(new Image(rs));
+            rs.close();
+        }
+    }
+
     enum SQLUser {
         GET("SELECT * FROM \"user\" WHERE firstname = ?"),
+        GET_IMAGES("SELECT * FROM image WHERE owner = ?"),
         INSERT("INSERT INTO \"user\" (firstname, lastname, phone, password) VALUES (?, ?, ?, ?)");
 
         final String QUERY;

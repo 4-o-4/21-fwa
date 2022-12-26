@@ -19,11 +19,10 @@ public class UserFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         User user = (User) req.getSession().getAttribute("user");
-        if (user != null) {
+        if (user != null)
             filterChain.doFilter(servletRequest, servletResponse);
-        } else {
+        else
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-        }
     }
 
     @Override

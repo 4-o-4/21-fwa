@@ -1,5 +1,8 @@
 package edu.school21.cinema.servlets;
 
+import edu.school21.cinema.models.Image;
+import edu.school21.cinema.models.User;
+import edu.school21.cinema.services.ImagesService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.ApplicationContext;
 
@@ -15,12 +18,15 @@ import javax.servlet.http.Part;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLException;
+import java.util.UUID;
 
 @Log4j2
 @MultipartConfig
 @WebServlet("/profile")
 public class Profile extends HttpServlet {
     private String path;
+    private ImagesService imagesService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,11 +37,13 @@ public class Profile extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Part filePart = req.getPart("file");
         String fileName = getFileName(filePart);
+        long size = filePart.getSize();
+        String mime = filePart.getContentType();
         if (fileName == null || fileName.equals("")) {
             req.getRequestDispatcher("/WEB-INF/jsp/profile.jsp").forward(req, resp);
             return;
         }
-        if (!"image/jpeg".equals(filePart.getContentType()) && !"image/png".equals(filePart.getContentType())) {
+        if (!"image/jpeg".equals(mime) && !"image/png".equals(mime)) {
             req.getRequestDispatcher("/WEB-INF/jsp/profile.jsp").forward(req, resp);
             return;
         }
@@ -43,13 +51,19 @@ public class Profile extends HttpServlet {
         if (!file.exists()) {
             file.mkdirs();
         }
-        try (OutputStream out = Files.newOutputStream(Paths.get(path + File.separator + fileName))) {
+        String uniqueFileName = uniqueFileName(mime);
+        try (OutputStream out = Files.newOutputStream(Paths.get(path + File.separator + uniqueFileName))) {
             try (InputStream in = filePart.getInputStream()) {
                 int read = 0;
                 byte[] bytes = new byte[1024];
-                while ((read = in.read(bytes)) != -1) {
+                while ((read = in.read(bytes)) != -1)
                     out.write(bytes, 0, read);
-                }
+                User user = (User) req.getSession().getAttribute("user");
+                long id = user.getId();
+                Image image = imagesService.save(id, fileName, uniqueFileName, mime, size);
+                user.getImages().add(image);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         }
         req.getRequestDispatcher("/WEB-INF/jsp/profile.jsp").forward(req, resp);
@@ -60,6 +74,7 @@ public class Profile extends HttpServlet {
         ServletContext context = config.getServletContext();
         ApplicationContext springContext = (ApplicationContext) context.getAttribute("springContext");
         this.path = springContext.getBean(String.class);
+        this.imagesService = springContext.getBean(ImagesService.class);
     }
 
     private String getFileName(final Part part) {
@@ -72,5 +87,10 @@ public class Profile extends HttpServlet {
             }
         }
         return null;
+    }
+
+    private String uniqueFileName(String contentType) {
+        String type = contentType.split("/")[1];
+        return UUID.randomUUID().toString().replace("-", "") + "." + type;
     }
 }

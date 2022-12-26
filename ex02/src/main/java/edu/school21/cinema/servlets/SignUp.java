@@ -21,11 +21,10 @@ public class SignUp extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("user");
-        if (user != null) {
+        if (user != null)
             resp.sendRedirect("/profile");
-        } else {
+        else
             req.getRequestDispatcher("WEB-INF/jsp/signUp.jsp").forward(req, resp);
-        }
     }
 
     @Override

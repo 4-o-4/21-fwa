@@ -18,4 +18,16 @@
     </div>
 </form>
 
+<table border="1" bordercolor="#000000" cellspacing="0" cellpadding="10">
+    <thead>
+        <tr>
+            <td>File name</td>
+            <td>Size</td>
+            <td>MIME</td>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
 <jsp:include page="/WEB-INF/jsp/includes/footer.jsp"/>
