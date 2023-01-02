@@ -3,7 +3,15 @@
 <jsp:include page="/WEB-INF/jsp/includes/header.jsp"/>
 <jsp:useBean id="user" scope="session" type="edu.school21.cinema.models.User"/>
 
-<img style="height:auto;" alt="Avatar" width="200" height="200" src="<c:url value="images/${user.images.get(user.images.size() - 1).file}"/>"/>
+<img style="width:auto;" alt="Avatar" width="200" height="200"
+<c:choose>
+    <c:when test="${user.images.size() != 0}">
+        src="<c:url value="data:${user.images.get(user.images.size() - 1).mime};base64,${img}"/>"/>
+    </c:when>
+    <c:otherwise>
+        src="/"/>
+    </c:otherwise>
+</c:choose>
 
 <h1>Profile: ${user.firstname} ${user.lastname}</h1>
 <p>Phone: ${user.phone}</p>
