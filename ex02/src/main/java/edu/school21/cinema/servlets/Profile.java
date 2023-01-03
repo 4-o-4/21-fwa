@@ -29,10 +29,11 @@ public class Profile extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getSession().setAttribute("path", this.path);
         User user = (User) req.getSession().getAttribute("user");
         if (!user.getImages().isEmpty()) {
             String uniqueFileName = user.getImages().get(user.getImages().size() - 1).getFile();
-            try (InputStream in = Files.newInputStream(Paths.get(path + File.separator + uniqueFileName))) {
+            try (InputStream in = Files.newInputStream(Paths.get(this.path + File.separator + uniqueFileName))) {
                 byte[] bytes = in.readAllBytes();
                 req.getSession().setAttribute("img", Base64.getEncoder().encodeToString(bytes));
             } catch (NoSuchFileException ignored) {
@@ -49,7 +50,7 @@ public class Profile extends HttpServlet {
             File file = new File(this.path + File.separator);
             if (!file.exists())
                 file.mkdirs();
-            imagesService.save(req, filePart, path);
+            imagesService.save(req, filePart, this.path);
         }
         resp.sendRedirect("/profile");
     }
