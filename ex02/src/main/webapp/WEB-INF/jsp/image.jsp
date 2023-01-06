@@ -2,6 +2,7 @@
 <%@ page import="java.io.InputStream" %>
 <%@ page import="java.nio.file.Files" %>
 <%@ page import="java.nio.file.Paths" %>
+<%@ page trimDirectiveWhitespaces="true" %>
 
 <%
     String uniqueFileName = request.getPathInfo().substring(1);

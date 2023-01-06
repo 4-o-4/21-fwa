@@ -16,6 +16,7 @@ public class User {
     private String phone;
     private String password;
     private List<Image> images = new ArrayList<>();
+    private List<Info> info = new ArrayList<>();
 
     public User(ResultSet rs) throws SQLException {
         this(rs.getLong("id"),

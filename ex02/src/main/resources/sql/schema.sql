@@ -9,6 +9,12 @@ CREATE TABLE "user" (
     password    varchar
 );
 
+CREATE TABLE info (
+    owner       integer not null,
+    date        timestamp default current_timestamp,
+    ip          varchar(20) not null
+);
+
 CREATE TABLE image (
     owner       integer not null,
     filename    varchar,
