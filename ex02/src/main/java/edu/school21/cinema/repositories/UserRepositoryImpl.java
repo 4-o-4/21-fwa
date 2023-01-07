@@ -33,7 +33,10 @@ public class UserRepositoryImpl implements UserRepository, InfoRepository {
             }
             if (user != null) {
                 findImages(user);
-                save(user.getId(), new Timestamp(new Date().getTime()), req.getRemoteAddr());
+                String ip = req.getRemoteAddr();
+                if ("0:0:0:0:0:0:0:1".equals(ip))
+                    ip = "127.0.0.1";
+                save(user.getId(), new Timestamp(new Date().getTime()), ip);
                 findInfo(user);
             }
             rs.close();

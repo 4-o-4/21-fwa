@@ -15,7 +15,7 @@
     </div>
     <div>
         <label>
-            <input type="text" name="phone" placeholder="Телефон" required>
+            <input type="tel" name="phone" placeholder="+7 (900) 123-45-67" pattern="\+7\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}" required>
         </label>
     </div>
     <div>

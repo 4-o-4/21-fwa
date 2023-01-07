@@ -32,9 +32,9 @@
         <table width="700px" border="1" cellpadding="10">
             <thead bgcolor="bisque">
             <tr>
-                <td>Date</td>
-                <td>Time</td>
-                <td>IP</td>
+                <td style="width: 60%">Date</td>
+                <td style="width: 20%">Time</td>
+                <td style="width: 20%">IP</td>
             </tr>
             </thead>
             <tbody>
@@ -56,9 +56,9 @@
         <table width="700px" border="1" cellpadding="10">
             <thead bgcolor="bisque">
             <tr>
-                <td>File name</td>
-                <td>Size</td>
-                <td>MIME</td>
+                <td style="width: 60%">File name</td>
+                <td style="width: 20%">Size</td>
+                <td style="width: 20%">MIME</td>
             </tr>
             </thead>
             <tbody>

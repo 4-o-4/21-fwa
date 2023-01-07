@@ -1,4 +1,5 @@
 drop table if exists "user" cascade;
+drop table if exists info cascade;
 drop table if exists image cascade;
 
 CREATE TABLE "user" (
