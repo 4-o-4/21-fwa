@@ -5,7 +5,6 @@ import edu.school21.cinema.models.Image;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class ImageRepositoryImpl implements ImageRepository {
     private final Connection connection;
@@ -16,7 +15,7 @@ public class ImageRepositoryImpl implements ImageRepository {
 
     @Override
     public void save(long id, Image image) throws SQLException {
-        try (PreparedStatement pst = connection.prepareStatement(ImageRepositoryImpl.SQLImage.INSERT.QUERY, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement pst = connection.prepareStatement(ImageRepositoryImpl.SQLImage.INSERT.QUERY)) {
             pst.setLong(1, id);
             pst.setString(2, image.getName());
             pst.setString(3, image.getFile());

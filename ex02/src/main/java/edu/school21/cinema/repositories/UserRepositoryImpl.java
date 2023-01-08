@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.*;
-import java.util.Date;
 import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepository, InfoRepository {
@@ -36,7 +35,7 @@ public class UserRepositoryImpl implements UserRepository, InfoRepository {
                 String ip = req.getRemoteAddr();
                 if ("0:0:0:0:0:0:0:1".equals(ip))
                     ip = "127.0.0.1";
-                save(user.getId(), new Timestamp(new Date().getTime()), ip);
+                save(user.getId(), ip);
                 findInfo(user);
             }
             rs.close();
@@ -46,7 +45,7 @@ public class UserRepositoryImpl implements UserRepository, InfoRepository {
 
     @Override
     public void save(User user) throws SQLException {
-        try (PreparedStatement pst = connection.prepareStatement(SQLUser.INSERT.QUERY, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLUser.INSERT.QUERY)) {
             pst.setString(1, user.getFirstname());
             pst.setString(2, user.getLastname());
             pst.setString(3, user.getPhone());
@@ -66,11 +65,10 @@ public class UserRepositoryImpl implements UserRepository, InfoRepository {
     }
 
     @Override
-    public void save(long id, Timestamp date, String ip) throws SQLException {
-        try (PreparedStatement pst = connection.prepareStatement(SQLUser.INSERT_INFO.QUERY, Statement.RETURN_GENERATED_KEYS)) {
+    public void save(long id, String ip) throws SQLException {
+        try (PreparedStatement pst = connection.prepareStatement(SQLUser.INSERT_INFO.QUERY)) {
             pst.setLong(1, id);
-            pst.setTimestamp(2, date);
-            pst.setString(3, ip);
+            pst.setString(2, ip);
             pst.executeUpdate();
         }
     }
@@ -91,7 +89,7 @@ public class UserRepositoryImpl implements UserRepository, InfoRepository {
         GET_IMAGES("SELECT * FROM image WHERE owner = ?"),
         GET_INFO("SELECT * FROM info WHERE owner = ?"),
         INSERT("INSERT INTO \"user\" (firstname, lastname, phone, password) VALUES (?, ?, ?, ?)"),
-        INSERT_INFO("INSERT INTO info(owner, date, ip) VALUES (?, ?, ?)");;
+        INSERT_INFO("INSERT INTO info(owner, ip) VALUES (?, ?)");
 
         final String QUERY;
 
