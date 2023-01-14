@@ -8,7 +8,6 @@ import edu.school21.cinema.services.ImagesService;
 import edu.school21.cinema.services.UsersService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,7 +18,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @Configuration
-@ComponentScan("edu.school21.cinema")
 @PropertySource("file:src/main/webapp/WEB-INF/application.properties")
 public class ApplicationConfig {
     @Value("${db.url}")
